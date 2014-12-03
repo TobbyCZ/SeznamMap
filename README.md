@@ -1,5 +1,5 @@
 #SeznamMap
-=========
+
 Display markers on Google (API v3) map based on addresses.
 
 ##How to use map
