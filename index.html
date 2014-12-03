@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <title>Mapa</title>
+  <style>
+    html { height: 100% }
+    body { height: 100%; margin: 0px; padding: 0px }
+    #map_canvas { height: 100%; position: fixed; top: 0; bottom: 0; left: 0; right: 0; z-index: 0;}
+    #map_wrapper { height:100%; width: 100%; background-color: #FFF; position:absolute; z-index:1;}
+    .info-content { width: 200px; height: 60px; }
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+</head>
+
+<body>
+  <div id="map_wrapper">
+    <div id="map_canvas" class="mapping"></div>
+  </div>
+
+<script>
+  var places = [
+  //Adresses in map - STREET-STREET NUMBER-POSTCODE-CITY
+  
+   "1. máje,180,74733,Oldřišov",
+"1. máje,733/10,74723,Bolatice"
+
+  ];
+  jQuery(function($) {
+      // Asynchronously Load the map API 
+      var script = document.createElement('script');
+      script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&callback=initialize";
+      document.body.appendChild(script);
+  });
+
+  function initialize() {
+      var map;
+      var bounds = new google.maps.LatLngBounds();
+      var mapOptions = {
+          mapTypeId: 'roadmap'
+      };
+                      
+      // Display a map on the page
+      map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+      map.setTilt(45);
+
+      // Multiple Markers
+      var markers = new Array();
+      
+      // Call Google Maps API Geocode for coordinates of address and add it into markers array
+      (function myLoop (i) {          
+         setTimeout(function () {  
+
+              /* Start API calling */
+              $.get( "https://maps.googleapis.com/maps/api/geocode/json?address=" + places[i], function( data ) {
+                markers.push([data.results[0].formatted_address, data.results[0].geometry.location.lat, data.results[0].geometry.location.lng]);
+                console.log("#" + markers.length + " of: " + (places.length - 1));
+                if (markers.length == places.length -1){
+                  displayMyMap();
+                }
+              });      
+              /* End of calling */
+
+            if (--i) myLoop(i); //  decrement i and call myLoop again if i > 0
+         }, 100)
+      })(places.length -1); //  pass the number of iterations as an argument
+
+             
+    function displayMyMap() {
+    // Display multiple markers on a map
+      var infoWindow = new google.maps.InfoWindow(), marker, i;
+      
+      // Loop through our array of markers & place each one on the map  
+      for( i = 0; i < markers.length; i++ ) {
+          var position = new google.maps.LatLng(markers[i][1], markers[i][2]);
+          bounds.extend(position);
+          marker = new google.maps.Marker({
+              position: position,
+              map: map,
+              title: markers[i][0]
+          });
+          
+          // Allow each marker to have an info window    
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+              return function() {
+                  infoWindow.setContent('<div class="info_content">' + marker.title + '</div>');
+                  infoWindow.open(map, marker);
+              }
+          })(marker, i));
+
+          // Automatically center the map fitting all markers on the screen
+          map.fitBounds(bounds);
+      }
+
+      // Override our map zoom level once our fitBounds function runs (Make sure it only runs once)
+      var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
+          this.setZoom(10);
+          google.maps.event.removeListener(boundsListener);
+      });
+    }
+  }
+</script>
+</body>
+</html>
