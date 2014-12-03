@@ -1,4 +1,4 @@
 SeznamMap
 =========
 
-Display markers on map with adresses
+Display markers on map based on addresses.
