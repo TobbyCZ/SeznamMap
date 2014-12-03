@@ -1,7 +1,7 @@
 SeznamMap
 =========
 
-Display markers on map based on addresses.
+Display markers on Google (API v3) map based on addresses.
 
 How to use map
 =========
@@ -11,4 +11,4 @@ After that you need to open script in your browser and wait for load map. Map is
 
 Changelog
 =========
-Version 1.0.1: Updatet bugs at long addresses
+Version 1.0.1: Updated bugs at long addresses
