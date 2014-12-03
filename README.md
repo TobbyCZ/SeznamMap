@@ -11,4 +11,6 @@ After that you need to open script in your browser and wait for load map. Map is
 
 Changelog
 =========
+Version 0.9: Increase number of attempts for load map (up to 2500 - maximum limit given by Google Maps APIv3)
+Version 1.0: Changed input of address points
 Version 1.0.1: Updated bugs at long addresses
