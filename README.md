@@ -2,6 +2,8 @@
 
 Display markers on Google (API v3) map based on addresses.
 
+![Mapa](http://vojtechvymetal.cz/seznam/map.jpg)
+
 ##How to use map
 
 Into source code you must plug the addresses in this format: "Street,street number,postcode,city".
